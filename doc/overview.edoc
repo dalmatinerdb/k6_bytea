@@ -1,0 +1,20 @@
+@author Arlen Cuss <arlen+edoc@kivikakk.ee>
+@copyright 2013 Arlen Cuss
+@version 1.0.0
+@title k6_bytea: a mutable byte array for Erlang
+
+@doc k6_bytea provides a mutable byte array for Erlang, intended for scenarios
+where using binary strings would be egregious to performance or semantics.
+
+Notes:
+
+<ul>
+<li>The byte arrays currently cannot be sent between nodes.</li>
+<li>Simultaneous access to the byte array from multiple Erlang processes is unsafe.</li>
+<li>Byte arrays are not dynamically resizable.</li>
+<li>Byte arrays are deallocated when garbage collected.  Alternatively, you can
+call {@link k6_bytea:delete/1} to force the memory to be freed; any future
+actions on that byte array will result in `badarg' being thrown.</li>
+</ul>
+
+See the {@link k6_bytea} module documentation for usage.
