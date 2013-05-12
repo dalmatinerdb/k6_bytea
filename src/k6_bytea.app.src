@@ -1,0 +1,13 @@
+{application, k6_bytea,
+ [
+  {description, "A mutable byte array for Erlang."},
+  {vsn, "1.0.0"},
+  {modules, [k6_bytea]},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, {k6_bytea_app, []}},
+  {env, []}
+ ]}.
