@@ -1,5 +1,6 @@
 # k6\_bytea [![Build Status](https://secure.travis-ci.org/kivikakk/k6_bytea.png)](http://travis-ci.org/kivikakk/k6\_bytea)
-## a mutable byte array for Erlang
+
+**A mutable byte array for Erlang.**
 
 k6\_bytea provides a mutable byte array for Erlang, intended for scenarios
 where using binary strings would be egregious to performance or semantics.
