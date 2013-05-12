@@ -7,7 +7,7 @@ all: erl
 erl:
 	$(REBAR) get-deps compile
 
-test: all
+test: erl
 	@mkdir -p .eunit
 	$(REBAR) skip_deps=true eunit
 
@@ -15,5 +15,5 @@ clean:
 	$(REBAR) clean
 	-rm -rvf deps ebin doc .eunit
 
-doc:
+doc: erl
 	$(REBAR) doc
