@@ -6,6 +6,7 @@
 
 -opaque bytea() :: bytea_opaque_resource_type.
 %% The byte array resource handle.
+-export_type([bytea/0]).
 
 %% Test support
 -ifdef(TEST).
