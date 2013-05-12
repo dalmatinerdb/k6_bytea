@@ -7,6 +7,14 @@ where using binary strings would be egregious to performance or semantics.
 The full documentation is available as `edoc`; `make doc` will generate them in
 the `doc` directory.
 
+You can use the following in your `rebar.config`:
+
+```erlang
+{deps, [
+    {k6_bytea, "1.0.1", {git, "https://github.com/kivikakk/k6_bytea.git", {tag, "v1.0.1"}}}
+]}.
+```
+
 ## authorship
 
 Original author: [Arlen Cuss](https://github.com/kivikakk).
