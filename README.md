@@ -12,7 +12,7 @@ You can use the following in your `rebar.config`:
 
 ```erlang
 {deps, [
-    {k6_bytea, "1.0.1", {git, "https://github.com/kivikakk/k6_bytea.git", {tag, "v1.0.1"}}}
+    {k6_bytea, "1.1.0", {git, "https://github.com/kivikakk/k6_bytea.git", {tag, "v1.1.0"}}}
 ]}.
 ```
 
