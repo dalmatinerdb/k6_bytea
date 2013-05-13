@@ -1,7 +1,7 @@
 -module(k6_bytea).
 -vsn("1.0.1").
 
--export([count/0, new/1, delete/1, size/1, get/3, set/3]).
+-export([count/0, new/1, delete/1, size/1, get/3, set/3, from_binary/1, to_binary/1]).
 -on_load(init/0).
 
 -opaque bytea() :: bytea_opaque_resource_type.
@@ -67,31 +67,45 @@ get(_, _, _) ->
 set(_, _, _) ->
     exit(nif_not_loaded).
 
+%% @doc Creates a new byte array from the given binary string.
+-spec from_binary(Binary::binary()) -> bytea().
+from_binary(Binary) ->
+    Size = erlang:size(Binary),
+    Bytea = ?MODULE:new(Size),
+    ?MODULE:set(Bytea, 0, Binary),
+    Bytea.
+
+%% @doc Gets the entire contents of the byte array as a binary string.
+-spec to_binary(Bytea::bytea()) -> binary().
+to_binary(Bytea) ->
+    Size = ?MODULE:size(Bytea),
+    ?MODULE:get(Bytea, 0, Size).
+
 %% ===================================================================
 %% Unit tests
 %% ===================================================================
 -ifdef(TEST).
 
 allocation_test() ->
-    Bytea = k6_bytea:new(256),
+    Bytea = ?MODULE:new(256),
     ?assertMatch(<<>>, Bytea),
-    ?assertEqual(1, k6_bytea:count()),
-    ?assertEqual(256, k6_bytea:size(Bytea)),
-    ?assertEqual(ok, k6_bytea:delete(Bytea)),
-    ?assertError(badarg, k6_bytea:size(Bytea)),
-    ?assertError(badarg, k6_bytea:delete(Bytea)),
-    k6_bytea:new(128),
+    ?assertEqual(1, ?MODULE:count()),
+    ?assertEqual(256, ?MODULE:size(Bytea)),
+    ?assertEqual(ok, ?MODULE:delete(Bytea)),
+    ?assertError(badarg, ?MODULE:size(Bytea)),
+    ?assertError(badarg, ?MODULE:delete(Bytea)),
+    ?MODULE:new(128),
     erlang:garbage_collect(),
     % This seems prone to error.
-    ?assertEqual(0, k6_bytea:count()).
+    ?assertEqual(0, ?MODULE:count()).
 
 usage_test() ->
-    Bytea = k6_bytea:new(5),
-    ?assertEqual(<<0, 0, 0, 0, 0>>, k6_bytea:get(Bytea, 0, 5)),
-    ?assertEqual(ok, k6_bytea:set(Bytea, 2, <<$H, $I>>)),
-    ?assertEqual(<<0, $H, $I, 0>>, k6_bytea:get(Bytea, 1, 4)),
-    ?assertEqual(ok, k6_bytea:delete(Bytea)),
-    ?assertError(badarg, k6_bytea:get(Bytea, 0, 1)),
-    ?assertError(badarg, k6_bytea:set(Bytea, 0, <<1>>)).
+    Bytea = ?MODULE:new(5),
+    ?assertEqual(<<0, 0, 0, 0, 0>>, ?MODULE:get(Bytea, 0, 5)),
+    ?assertEqual(ok, ?MODULE:set(Bytea, 2, <<$H, $I>>)),
+    ?assertEqual(<<0, $H, $I, 0>>, ?MODULE:get(Bytea, 1, 4)),
+    ?assertEqual(ok, ?MODULE:delete(Bytea)),
+    ?assertError(badarg, ?MODULE:get(Bytea, 0, 1)),
+    ?assertError(badarg, ?MODULE:set(Bytea, 0, <<1>>)).
 
 -endif.

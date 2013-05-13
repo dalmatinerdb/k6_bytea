@@ -1,5 +1,4 @@
 #include "erl_nif.h"
-#include <stdio.h>
 #include <string.h>
 
 /* NOTE: it's unclear whether I need to use process-independent environments to
@@ -43,7 +42,6 @@ static int bytea_dispose(privdata_t *priv, bytea_t *ba) {
 
     decrement_count(priv);
     free(ba->array);
-    fprintf(stderr, "k6_bytea: freed %d bytes (%p)\n", ba->size, ba);
     ba->array = NULL;
     return 1;
 }
@@ -68,7 +66,6 @@ static ERL_NIF_TERM new_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
     enif_release_resource(ba);
 
     increment_count(priv);
-    fprintf(stderr, "k6_bytea: allocated %d bytes (%p)\n", i, ba);
     return term;
 }
 
@@ -169,7 +166,6 @@ static ErlNifFunc nif_funcs[] = {
 };
 
 static int nif_load(ErlNifEnv *env, void **priv_data, ERL_NIF_TERM load_info) {
-    fprintf(stderr, "k6_bytea: load\n");
     privdata_t *priv = malloc(sizeof(*priv));
     priv->resource_type = enif_open_resource_type(
         env,
@@ -190,7 +186,6 @@ static int nif_upgrade(ErlNifEnv *env, void **priv_data, void **old_priv_data, E
 }
 
 static void nif_unload(ErlNifEnv *env, void *priv_data) {
-    fprintf(stderr, "k6_bytea: unload\n");
     privdata_t *priv = priv_data;
     enif_mutex_destroy(priv->count_mutex);
 }
