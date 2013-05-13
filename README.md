@@ -16,6 +16,9 @@ You can use the following in your `rebar.config`:
 ]}.
 ```
 
+Slightly dubious statistics on k6\_bytea's performance are available [in a blog
+post I wrote about it](http://kivikakk.ee/2013/05/13/k6_bytea.html).
+
 ## authorship
 
 Original author: [Arlen Cuss](https://github.com/kivikakk).
