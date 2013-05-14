@@ -13,7 +13,7 @@ test: erl
 
 clean:
 	$(REBAR) clean
-	-rm -rvf deps ebin doc .eunit
+	-rm -rvf deps ebin .eunit
 
 doc: erl
 	$(REBAR) doc
