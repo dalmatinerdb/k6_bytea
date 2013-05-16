@@ -182,11 +182,16 @@ static int nif_load(ErlNifEnv *env, void **priv_data, ERL_NIF_TERM load_info) {
 
 static int nif_upgrade(ErlNifEnv *env, void **priv_data, void **old_priv_data, ERL_NIF_TERM load_info) {
     *priv_data = *old_priv_data;
+    *old_priv_data = NULL;
     return 0;
 }
 
 static void nif_unload(ErlNifEnv *env, void *priv_data) {
     privdata_t *priv = priv_data;
+    if (!priv) {
+        // It's been acquisitioned.
+        return;
+    }
     enif_mutex_destroy(priv->count_mutex);
 }
 
