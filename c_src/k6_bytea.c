@@ -1,6 +1,13 @@
 #include "erl_nif.h"
 #include <string.h>
 
+#ifdef DEBUG
+#include <stdio.h>
+#define DEBUGF(format, ...) fprintf(stderr, "%s:%d %s: " format "\r\n", __FILE__, __LINE__, __func__, ##__VA_ARGS__)
+#else
+#define DEBUGF(...)
+#endif
+
 /* NOTE: it's unclear whether I need to use process-independent environments to
  * house the bytea_t resources themselves.  Testing required. */
 
@@ -12,15 +19,23 @@ typedef struct {
 } privdata_t;
 
 static void increment_count(privdata_t *priv) {
+    DEBUGF("lock priv %p mtx %p", priv, priv->count_mutex);
     enif_mutex_lock(priv->count_mutex);
+    DEBUGF("lock priv %p mtx %p", priv, priv->count_mutex);
     ++priv->count;
+    DEBUGF("unlock priv %p mtx %p", priv, priv->count_mutex);
     enif_mutex_unlock(priv->count_mutex);
+    DEBUGF("unlock priv %p mtx %p", priv, priv->count_mutex);
 }
 
 static void decrement_count(privdata_t *priv) {
+    DEBUGF("lock priv %p mtx %p", priv, priv->count_mutex);
     enif_mutex_lock(priv->count_mutex);
+    DEBUGF("lock priv %p mtx %p", priv, priv->count_mutex);
     --priv->count;
+    DEBUGF("unlock priv %p mtx %p", priv, priv->count_mutex);
     enif_mutex_unlock(priv->count_mutex);
+    DEBUGF("unlock priv %p mtx %p", priv, priv->count_mutex);
 }
 
 static int get_count(privdata_t *priv) {
@@ -36,19 +51,24 @@ typedef struct {
 } bytea_t;
 
 static int bytea_dispose(privdata_t *priv, bytea_t *ba) {
+    DEBUGF("priv %p", priv);
     if (!ba->array) {
+        DEBUGF("priv early done %p", priv);
         return 0;
     }
 
     decrement_count(priv);
     free(ba->array);
     ba->array = NULL;
+    DEBUGF("priv done %p", priv);
     return 1;
 }
 
 static void bytea_dtor(ErlNifEnv *env, void *obj) {
     privdata_t *priv = enif_priv_data(env);
+    DEBUGF("start priv %p", priv);
     bytea_dispose(priv, obj);
+    DEBUGF("done priv %p", priv);
 }
 
 static ERL_NIF_TERM new_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) {
@@ -166,6 +186,7 @@ static ErlNifFunc nif_funcs[] = {
 };
 
 static int nif_load(ErlNifEnv *env, void **priv_data, ERL_NIF_TERM load_info) {
+    DEBUGF("LOAD");
     privdata_t *priv = malloc(sizeof(*priv));
     priv->resource_type = enif_open_resource_type(
         env,
@@ -175,23 +196,25 @@ static int nif_load(ErlNifEnv *env, void **priv_data, ERL_NIF_TERM load_info) {
         NULL);
     priv->count_mutex = enif_mutex_create("k6_bytea count_mutex");
     priv->count = 0;
+    DEBUGF("loaded: %p %p %p", priv, priv->resource_type, priv->count_mutex);
 
     *priv_data = priv;
     return 0;
 }
 
 static int nif_upgrade(ErlNifEnv *env, void **priv_data, void **old_priv_data, ERL_NIF_TERM load_info) {
-    *priv_data = *old_priv_data;
-    *old_priv_data = NULL;
+    DEBUGF("UPGRADE");
+    int r = nif_load(env, priv_data, load_info);
+    if (r) {
+        return r;
+    }
+    (*(privdata_t **)priv_data)->count = (*(privdata_t **)old_priv_data)->count;
     return 0;
 }
 
 static void nif_unload(ErlNifEnv *env, void *priv_data) {
     privdata_t *priv = priv_data;
-    if (!priv) {
-        // It's been acquisitioned.
-        return;
-    }
+    DEBUGF("UNLOAD %p", priv);
     enif_mutex_destroy(priv->count_mutex);
 }
 
