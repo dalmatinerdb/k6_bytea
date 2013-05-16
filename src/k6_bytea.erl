@@ -1,5 +1,5 @@
 -module(k6_bytea).
--vsn("1.1.0").
+-vsn("1.1.1").
 
 -export([count/0, new/1, delete/1, size/1, get/3, set/3, from_binary/1, to_binary/1]).
 -on_load(init/0).
