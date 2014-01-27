@@ -21,13 +21,13 @@ post I wrote about it](http://kivikakk.ee/2013/05/13/k6_bytea.html).
 
 ## authorship
 
-Original author: [Arlen Cuss](https://github.com/kivikakk).
+Original author: [Yuki Izumi](https://github.com/kivikakk).
 
 ## copyright and licensing
 
 The [MIT license](http://opensource.org/licenses/MIT).
 
-Copyright &copy; 2013 Arlen Cuss
+Copyright &copy; 2013 Yuki Izumi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

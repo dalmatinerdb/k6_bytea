@@ -1,5 +1,5 @@
-@author Arlen Cuss <arlen+edoc@kivikakk.ee>
-@copyright 2013 Arlen Cuss
+@author Yuki Izumi <edoc@kivikakk.ee>
+@copyright 2013 Yuki Izumi
 @version 1.1.2
 @title k6_bytea: a mutable byte array for Erlang
 
