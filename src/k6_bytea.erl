@@ -36,36 +36,36 @@ init() ->
 %% @doc Returns the number of currently allocated byte arrays.
 -spec count() -> integer().
 count() ->
-    exit(nif_not_loaded).
+    erlang:nif_error(nif_not_loaded).
 
 %% @doc Creates a new byte array and returns it.
 -spec new(Size::integer()) -> bytea().
 new(_) ->
-    exit(nif_not_loaded).
+    erlang:nif_error(nif_not_loaded).
 
 %% @doc Frees a byte array immediately.  It is no longer valid for use by this
 %% module; any attempts will result in `badarg'.
 -spec delete(Bytea::bytea()) -> ok.
 delete(_) ->
-    exit(nif_not_loaded).
+    erlang:nif_error(nif_not_loaded).
 
 %% @doc Returns the size of the byte array in bytes.
 -spec size(Bytea::bytea()) -> integer().
 size(_) ->
-    exit(nif_not_loaded).
+    erlang:nif_error(nif_not_loaded).
 
 %% @doc Gets `Len' bytes from the byte array, starting at `From'.  If the slice
 %% specified exceeds any boundaries, `badarg' results.
 -spec get(Bytea::bytea(), From::integer(), Len::integer()) -> binary().
 get(_, _, _) ->
-    exit(nif_not_loaded).
+    erlang:nif_error(nif_not_loaded).
 
 %% @doc Replaces the substring of byte array, starting at `From', with `Value'.
 %% If the slice so specified exceeds boundaries of the byte array, `badarg'
 %% results.
 -spec set(Bytea::bytea(), From::integer(), Value::binary()) -> ok.
 set(_, _, _) ->
-    exit(nif_not_loaded).
+    erlang:nif_error(nif_not_loaded).
 
 %% @doc Creates a new byte array from the given binary string.
 -spec from_binary(Binary::binary()) -> bytea().
