@@ -1,16 +1,11 @@
-{application, k6_bytea,
- [
-  {description, "A mutable byte array for Erlang."},
-  {vsn, "1.1.4"},
-  {modules, [k6_bytea]},
-  {registered, []},
-  {applications, [
-                  kernel,
-                  stdlib
-                 ]},
-  {mod, {k6_bytea_app, []}},
-  {env, []},
-  {contributors,["Yuki Izumi"]},
-  {licenses,["MIT"]},
-  {links,[{"Git","https://git.k6.io/kivikakk/k6_bytea"}]}
- ]}.
+{application,k6_bytea,
+             [{description,"A mutable byte array for Erlang."},
+              {vsn,"1.1.5"},
+              {modules,[k6_bytea]},
+              {registered,[]},
+              {applications,[kernel,stdlib]},
+              {mod,{k6_bytea_app,[]}},
+              {env,[]},
+              {maintainers,["Yuki Izumi","Heinz N. Gies"]},
+              {licenses,["MIT"]},
+              {links,[{"Git","https://git.k6.io/kivikakk/k6_bytea"}]}]}.
